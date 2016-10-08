@@ -1,2 +1,10 @@
 numpy
 ipython
+nose
+cython
+pandas
+sympy
+freetype
+matplotlib
+SciPy
+scikit-learn
