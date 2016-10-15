@@ -17,13 +17,9 @@ def parse_data():
             else:
                 raise AssertionError('Sex not male or female')
 
-            data.append([row['Pclass'], row['SibSp'], row['Parch'], row['Fare']])
+            data.append([float(x) for x in [row['Pclass'], row['SibSp'], row['Parch'], row['Fare']]])
             survived.append(row['Survived'])
 
-    data, sex = numpy.array([float(x) for row in data for x in row]), numpy.array(sex)
-    processed = numpy.hstack((preprocessing.normalize(data, norm='max'), sex))
+    data, sex = numpy.array(data), numpy.array(sex)
+    processed = numpy.column_stack((preprocessing.normalize(data, norm='max'), sex))
     return processed
-
-a = parse_data()
-for i in range(2):
-    print i
