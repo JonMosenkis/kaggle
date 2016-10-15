@@ -3,6 +3,9 @@
 from csv import DictReader
 import numpy
 from sklearn import preprocessing
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import learning_curve
+from matplotlib import pyplot as plot
 
 
 def parse_data():
@@ -22,4 +25,23 @@ def parse_data():
 
     data, sex = numpy.array(data), numpy.array(sex)
     processed = numpy.column_stack((preprocessing.normalize(data, norm='max'), sex))
-    return processed
+    return {
+        'classifiers': processed,
+        'labels': survived
+    }
+
+
+def test_logistic_regression(X, y):
+    learner = LogisticRegression(penalty='l1')
+    train_sizes, train_scores, test_scores = learning_curve(learner, X, y)
+    plot.figure()
+    plot.xlabel('Training Examples')
+    plot.ylabel('Score')
+    plot.grid()
+    plot.plot(train_sizes, numpy.mean(train_scores, axis=1), color='r', label='training scores')
+    plot.plot(train_sizes, numpy.mean(test_scores, axis=1), color='g', label='test_scores')
+    return plot
+
+data = parse_data()
+test_logistic_regression(data['classifiers'], data['labels'])
+plot.show()
